@@ -1,4 +1,75 @@
-‎<!doctype html>
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Hotspot MyPhone</title>
+  <style>
+    body{font-family:system-ui,Arial, sans-serif;margin:2rem;background:#f7f7f8;color:#111}
+    .card{max-width:520px;margin:0 auto;padding:1.25rem;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.06);background:#fff}
+    h1{font-size:1.25rem;margin-bottom:0.25rem}
+    p{margin:.5rem 0}
+    .secret{font-family:monospace;padding:.25rem .5rem;border-radius:6px;background:#f0f0f2;display:inline-block}
+    .controls{margin-top:0.75rem;display:flex;gap:.5rem}
+    button{padding:.45rem .6rem;border-radius:8px;border:1px solid #e2e2e6;background:#fff;cursor:pointer}
+    small{color:#666}
+    .hint{margin-top:.5rem;color:#444;font-size:.95rem}
+  </style>
+</head>
+<body>
+  <div class="card" role="main" aria-labelledby="title">
+    <h1 id="title">Hotspot: WIFI GRATIS</h1>
+
+    <p>
+      Password:
+      <span id="pwd" class="secret">WIFIGRATISNICH</span>
+    </p>
+
+    <div class="controls">
+      <button id="toggleBtn" type="button" aria-pressed="false">Sembunyikan</button>
+      <button id="copyBtn" type="button">Copy Password</button>
+    </div>
+
+    <p class="hint"><small>Link ini dapat dilihat siapa saja yang mendapat alamat ini — gunakan hanya untuk teman yang kamu percaya.</small></p>
+  </div>
+
+  <script>
+    const pwdEl = document.getElementById('pwd');
+    const toggleBtn = document.getElementById('toggleBtn');
+    const copyBtn = document.getElementById('copyBtn');
+
+    // toggle show/hide (simple mask)
+    let visible = true;
+    toggleBtn.addEventListener('click', () => {
+      visible = !visible;
+      if (visible) {
+        pwdEl.textContent = pwdEl.dataset.full || pwdEl.textContent;
+        toggleBtn.textContent = 'Sembunyikan';
+        toggleBtn.setAttribute('aria-pressed', 'false');
+      } else {
+        // mask with same length
+        pwdEl.dataset.full = pwdEl.textContent;
+        pwdEl.textContent = '*'.repeat(pwdEl.dataset.full.length);
+        toggleBtn.textContent = 'Tunjukkan';
+        toggleBtn.setAttribute('aria-pressed', 'true');
+      }
+    });
+
+    // copy to clipboard
+    copyBtn.addEventListener('click', async () => {
+      try {
+        const textToCopy = pwdEl.dataset.full || pwdEl.textContent;
+        await navigator.clipboard.writeText(textToCopy);
+        copyBtn.textContent = 'Tersalin ✓';
+        setTimeout(()=> copyBtn.textContent = 'Copy Password', 1500);
+      } catch (err) {
+        // fallback
+        alert('Gagal copy otomatis — silakan tahan dan salin manual: ' + (pwdEl.dataset.full || pwdEl.textContent));
+      }
+    });
+  </script>
+</body>
+</html>‎<!doctype html>
 ‎<html>
 ‎<head>
 ‎  <meta charset="utf-8">
